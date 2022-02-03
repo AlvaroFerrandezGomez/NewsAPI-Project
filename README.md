@@ -21,8 +21,3 @@ Es necesario descargar y realizar un pod install para ejecutar el proyecto.
 
 ![Captura de pantalla 2022-02-03 a las 21 37 13](https://user-images.githubusercontent.com/98533901/152425585-a870177b-c539-4faf-8380-e948f33821dd.png)
 ![Captura de pantalla 2022-02-03 a las 21 37 18](https://user-images.githubusercontent.com/98533901/152425630-4d755859-ac1f-40b3-8534-3b27725b8b61.png)
-
-
-
-https://user-images.githubusercontent.com/98533901/152426877-1ab82209-135b-4f2f-b7f6-591968ede233.mp4
-

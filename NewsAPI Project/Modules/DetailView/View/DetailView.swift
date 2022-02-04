@@ -7,6 +7,18 @@
 
 import UIKit
 
+// MARK: - Constants
+
+extension DetailView {
+    private enum Constants {
+        static let backGroundColor = UIColor.white
+        static let navBarTintColor = UIColor.na_magenta
+        static let bayStyleColor = UIBarStyle.black
+    }
+}
+
+// MARK: - DetailView
+
 class DetailView: UIViewController {
     var viewModel: DefaultDetailViewModel?
 
@@ -26,6 +38,8 @@ class DetailView: UIViewController {
         DetailViewDelegate()
     }()
 
+    // MARK: - Lifecycle methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,22 +49,47 @@ class DetailView: UIViewController {
 
         viewModel?.viewDidLoad()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationBar()
     }
 
+    // MARK: - Setup view method
+
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = Constants.backGroundColor
         view.addSubview(tableView)
         setupConstraints()
     }
 
-    func setupNavigationBar() {
-        navigationController?.navigationBar.barStyle = .black
-        navigationController?.navigationBar.tintColor = UIColor.na_magenta
+    func configureTableView() {
+        tableView.backgroundColor = Constants.backGroundColor
+        tableView.delegate = delegate
+        tableView.dataSource = dataSource
+        tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.alwaysBounceVertical = false
+
+        dataSource.registerCells()
     }
+
+    // MARK: - Setup NavigationBar method
+
+    func setupNavigationBar() {
+        navigationController?.navigationBar.barStyle = Constants.bayStyleColor
+        navigationController?.navigationBar.tintColor = Constants.navBarTintColor
+    }
+
+    // MARK: - Binding method
+
+    func setupBinding() {
+        viewModel?.cells.bind { [weak self] _ in
+            self?.tableView.reloadData()
+        }
+    }
+
+    // MARK: - Constraints
 
     func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -59,22 +98,5 @@ class DetailView: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-
-    func setupBinding() {
-        viewModel?.cells.bind { [weak self] _ in
-            self?.tableView.reloadData()
-        }
-    }
-
-    func configureTableView() {
-        tableView.backgroundColor = .white
-        tableView.delegate = delegate
-        tableView.dataSource = dataSource
-        tableView.separatorStyle = .none
-        tableView.estimatedRowHeight = UITableView.automaticDimension
-        tableView.alwaysBounceVertical = false
-
-        dataSource.registerCells()
     }
 }

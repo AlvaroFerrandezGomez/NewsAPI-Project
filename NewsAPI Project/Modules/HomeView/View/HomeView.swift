@@ -7,7 +7,40 @@
 
 import UIKit
 
-class HomeView: UIViewController {
+// MARK: - Constants
+
+extension HomeView {
+    private enum Colours {
+        static let backGroundColor = UIColor.white
+        static let navBarTintColor = UIColor.na_magenta
+        static let bayStyleColor = UIColor.black
+        static let barTintColor = UIColor.na_magenta
+    }
+
+    private enum Images {
+        static let searchImage = UIImage(systemName: "magnifyingglass")
+        static let sortImageDown = UIImage(systemName: "chevron.down.circle")
+        static let sortImageUp = UIImage(systemName: "chevron.up.circle")
+    }
+
+    private enum Strings {
+        static let title = "News"
+        static let errorTitle = "Error"
+        static let errorDescription = "Ha ocurrido un error"
+        static let errorOK = "Ok"
+        static let placeholderString = "Escriba algo para buscar..."
+        static let emptyString = ""
+    }
+
+    private enum Constraints {
+        static let searchBarTop = 94.0
+        static let searchBarHeight = 60.0
+    }
+}
+
+// MARK: - HomeView
+
+class HomeView: UIViewController, UISearchBarDelegate {
     var viewModel: DefaultHomeViewModel?
 
     let searchBar: UISearchBar = {
@@ -33,6 +66,8 @@ class HomeView: UIViewController {
         HomeViewDelegate(view: self)
     }()
 
+    // MARK: - Lifecycle methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -50,31 +85,50 @@ class HomeView: UIViewController {
         setupNavigationBar()
     }
 
-    func setupTitleNavBar() {
-        navigationItem.title = "News"
+    // MARK: - Setup view method
 
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.na_magenta]
+    func setupView() {
+        view.backgroundColor = .white
+        view.addSubview(tableView)
+        setupConstraints()
+    }
+
+    func configureTableView() {
+        tableView.backgroundColor = Colours.backGroundColor
+        tableView.delegate = delegate
+        tableView.dataSource = dataSource
+        tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.alwaysBounceVertical = false
+
+        dataSource.registerCells()
+    }
+
+    // MARK: - Setup navigationBar methods
+
+    func setupTitleNavBar() {
+        navigationItem.title = Strings.title
+
+        let textAttributes = [NSAttributedString.Key.foregroundColor: Colours.barTintColor]
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.na_white
+        appearance.backgroundColor = Colours.backGroundColor
         appearance.titleTextAttributes = textAttributes
         navigationController?.navigationBar.standardAppearance = appearance
     }
 
     func setupNavigationBar() {
-        let searchImage = UIImage(systemName: "magnifyingglass")
-        let sortImageDown = UIImage(systemName: "chevron.down.circle")
-        let sortImageUp = UIImage(systemName: "chevron.up.circle")
+        let searchButton = UIBarButtonItem(image: Images.searchImage, style: .plain, target: self, action: #selector(searchButtonTappedHandler))
+        let sortButton = UIBarButtonItem(image: (viewModel?.upwardSorted.value ?? false) ? Images.sortImageUp : Images.sortImageDown, style: .plain, target: self, action: #selector(sortedButtonTappedHandler))
 
-        let searchButton = UIBarButtonItem(image: searchImage, style: .plain, target: self, action: #selector(searchButtonTappedHandler))
-        let sortButton = UIBarButtonItem(image: (viewModel?.upwardSorted.value ?? false) ? sortImageUp : sortImageDown, style: .plain, target: self, action: #selector(sortedButtonTappedHandler))
-
-        searchButton.tintColor = UIColor.na_magenta
-        sortButton.tintColor = UIColor.na_magenta
+        searchButton.tintColor = Colours.barTintColor
+        sortButton.tintColor = Colours.barTintColor
 
         navigationItem.rightBarButtonItems = [searchButton, sortButton]
     }
+
+    // MARK: - NavigationBar methods
 
     @objc func searchButtonTappedHandler() {
         viewModel?.searchBarVisible.value = !(viewModel?.searchBarVisible.value ?? false)
@@ -89,6 +143,8 @@ class HomeView: UIViewController {
         viewModel?.sortedButtonTapped()
     }
 
+    // MARK: - Navigation to detail method
+
     func goToDetail(id: String) {
         if let newSelected = viewModel?.model?.news.first(where: { $0.id == id }) {
             let viewController = DetailServiceLocator.provideViewController(newSelected: newSelected)
@@ -96,34 +152,46 @@ class HomeView: UIViewController {
         }
     }
 
-    func setupView() {
-        view.backgroundColor = .white
-        view.addSubview(tableView)
+    // MARK: - SearchBar methods
+
+    func setupSearchBar() {
+        searchBar.delegate = self
+        searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = Strings.placeholderString
+        searchBar.showsCancelButton = true
+
+        searchBar.tintColor = Colours.barTintColor
+        searchBar.searchTextField.textColor = Colours.barTintColor
+        searchBar.searchTextField.backgroundColor = Colours.barTintColor.withAlphaComponent(0.1)
+    }
+
+    func showSearchBar(searchBarVisible: Bool) {
+        if searchBarVisible {
+            view.addSubview(searchBar)
+        } else {
+            searchBar.removeFromSuperview()
+        }
+
+        view.removeAllConstraints()
         setupConstraints()
     }
 
-    func setupConstraints() {
-        if viewModel?.searchBarVisible.value ?? false {
-            NSLayoutConstraint.activate([
-                searchBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 94),
-                searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                searchBar.heightAnchor.constraint(equalToConstant: 60),
-                searchBar.bottomAnchor.constraint(equalTo: tableView.topAnchor),
-
-                tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                tableView.topAnchor.constraint(equalTo: view.topAnchor),
-                tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])
-        }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel?.filterNews(searchText: searchText)
     }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.text = Strings.emptyString
+        viewModel?.filterNews(searchText: Strings.emptyString)
+        viewModel?.searchBarVisible.value = false
+    }
+
+    // MARK: - Binding method
 
     func setupBinding() {
         viewModel?.cells.bind { [weak self] _ in
@@ -151,60 +219,37 @@ class HomeView: UIViewController {
         }
     }
 
+    // MARK: - Error method
+
     func showError() {
-        let alertView = UIAlertController(title: "Error", message: "Ha ocurrido un error", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default, handler: { _ in self.viewModel?.retryButton() })
+        let alertView = UIAlertController(title: Strings.errorTitle, message: Strings.errorDescription, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: Strings.errorOK, style: .default, handler: { _ in self.viewModel?.retryButton() })
         alertView.addAction(okAction)
         present(alertView, animated: true, completion: nil)
     }
 
-    func setupSearchBar() {
-        searchBar.delegate = self
-        searchBar.searchBarStyle = .minimal
-        searchBar.placeholder = "Escriba algo para buscar..."
-        searchBar.showsCancelButton = true
+    // MARK: - Constraints
 
-        searchBar.tintColor = UIColor.na_magenta
-        searchBar.searchTextField.textColor = UIColor.na_magenta
-        searchBar.searchTextField.backgroundColor = UIColor.na_magenta.withAlphaComponent(0.1)
-    }
+    func setupConstraints() {
+        if viewModel?.searchBarVisible.value ?? false {
+            NSLayoutConstraint.activate([
+                searchBar.topAnchor.constraint(equalTo: view.topAnchor, constant: Constraints.searchBarTop),
+                searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                searchBar.heightAnchor.constraint(equalToConstant: Constraints.searchBarHeight),
+                searchBar.bottomAnchor.constraint(equalTo: tableView.topAnchor),
 
-    func showSearchBar(searchBarVisible: Bool) {
-        if searchBarVisible {
-            view.addSubview(searchBar)
+                tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
         } else {
-            searchBar.removeFromSuperview()
+            NSLayoutConstraint.activate([
+                tableView.topAnchor.constraint(equalTo: view.topAnchor),
+                tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
         }
-
-        view.removeAllConstraints()
-        setupConstraints()
-    }
-
-    func configureTableView() {
-        tableView.backgroundColor = .white
-        tableView.delegate = delegate
-        tableView.dataSource = dataSource
-        tableView.separatorStyle = .none
-        tableView.estimatedRowHeight = UITableView.automaticDimension
-        tableView.alwaysBounceVertical = false
-
-        dataSource.registerCells()
-    }
-}
-
-extension HomeView: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel?.filterNews(searchText: searchText)
-    }
-
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        searchBar.text = ""
-        viewModel?.filterNews(searchText: "")
-        viewModel?.searchBarVisible.value = false
     }
 }

@@ -37,6 +37,8 @@ final class DefaultDetailViewModel: DetailViewModel {
         createCell()
     }
 
+    // MARK: - CreateCells method
+
     private func createCell() {
         var cells: [DetailViewListElements] = []
 

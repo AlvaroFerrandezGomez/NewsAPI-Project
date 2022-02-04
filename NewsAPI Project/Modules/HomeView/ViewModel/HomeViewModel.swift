@@ -52,6 +52,8 @@ final class DefaultHomeViewModel: HomeViewModel {
         self.fetchNews()
     }
 
+    // MARK: - Shimmer method
+
     func showShimmer() {
         var cells: [HomeViewListElements] = []
 
@@ -63,12 +65,10 @@ final class DefaultHomeViewModel: HomeViewModel {
         self.cells.value = cells
     }
 
-    func retryButton() {
-        self.viewDidLoad()
-    }
+    // MARK: - FetchNews method
 
     func fetchNews() {
-        fetchNewsUseCase.execute() { [weak self] result in
+        self.fetchNewsUseCase.execute { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
@@ -110,6 +110,8 @@ final class DefaultHomeViewModel: HomeViewModel {
         }
     }
 
+    // MARK: - CreateCells method
+
     func createCells() {
         var cells: [HomeViewListElements] = []
 
@@ -128,11 +130,15 @@ final class DefaultHomeViewModel: HomeViewModel {
         self.cells.value = cells
     }
 
+    // MARK: - Sorted method
+
     func sortedButtonTapped() {
         self.upwardSorted.value = !(self.upwardSorted.value ?? false)
         self.filteredNews = self.filteredNews.sorted(by: { (self.upwardSorted.value ?? false) ? $0.date < $1.date : $0.date > $1.date })
         self.createCells()
     }
+
+    // MARK: - Filter method
 
     func filterNews(searchText: String) {
         let unfilteredNews = self.model?.news ?? []
@@ -144,5 +150,11 @@ final class DefaultHomeViewModel: HomeViewModel {
         self.filteredNews = searchText.isEmpty ? unfilteredNews : filteredNewsAuxiliar
 
         self.createCells()
+    }
+
+    // MARK: - RetryButton method
+
+    func retryButton() {
+        self.viewDidLoad()
     }
 }

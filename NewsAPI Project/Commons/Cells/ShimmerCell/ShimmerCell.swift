@@ -7,18 +7,37 @@
 
 import UIKit
 
+// MARK: - Constants
+
+extension ShimmerCell {
+    private enum Constants {
+        static let shadowOpacity = Float(0.2)
+        static let shadowOffset = CGSize(width: 1, height: 4)
+        static let shadowRadius = CGFloat(5.0)
+        static let cornerRadius = 6.0
+    }
+
+    private enum Colours {
+        static let shimmerColor = UIColor.na_shimmer_background
+        static let shadowColor = UIColor.na_black.cgColor
+        static let borderBackgroundColor = UIColor.white
+    }
+}
+
+// MARK: - ShimmerCell
+
 final class ShimmerCell: UITableViewCell, ReusableCell {
     var borderView: UIView = {
         let borderView = UIView(frame: .zero)
         borderView.translatesAutoresizingMaskIntoConstraints = false
         borderView.layer.masksToBounds = false
-        borderView.layer.shadowColor = UIColor.na_black.cgColor
-        borderView.layer.shadowOpacity = Float(0.2)
-        borderView.layer.shadowOffset = CGSize(width: 1, height: 4)
-        borderView.layer.shadowRadius = CGFloat(5.0)
-        borderView.layer.cornerRadius = CGFloat(6.0)
+        borderView.layer.shadowColor = Colours.shadowColor
+        borderView.layer.shadowOpacity = Constants.shadowOpacity
+        borderView.layer.shadowOffset = Constants.shadowOffset
+        borderView.layer.shadowRadius = Constants.shadowRadius
+        borderView.layer.cornerRadius = Constants.cornerRadius
         borderView.layer.shadowPath = nil
-        borderView.backgroundColor = .white
+        borderView.backgroundColor = Colours.borderBackgroundColor
         borderView.clipsToBounds = false
 
         return borderView
@@ -61,18 +80,30 @@ final class ShimmerCell: UITableViewCell, ReusableCell {
 
         setupConstraints()
     }
+}
 
+// MARK: - Public methods
+
+extension ShimmerCell {
     func configure() {
         setupView()
         setupShimers()
         layoutIfNeeded()
     }
+}
 
+// MARK: - Private methods
+
+extension ShimmerCell {
     func setupShimers() {
-        imageViewCellView.addShimmer(withCornerRadius: CGFloat(6.0), withBackgroundColor: UIColor.na_shimmer_background)
-        titleLabelView.addShimmer(withCornerRadius: CGFloat(6.0), withBackgroundColor: UIColor.na_shimmer_background)
-        dateLabelView.addShimmer(withCornerRadius: CGFloat(6.0), withBackgroundColor: UIColor.na_shimmer_background)
-        descriptionLabelView.addShimmer(withCornerRadius: CGFloat(6.0), withBackgroundColor: UIColor.na_shimmer_background)
+        imageViewCellView.addShimmer(withCornerRadius: Constants.cornerRadius,
+                                     withBackgroundColor: Colours.shimmerColor)
+        titleLabelView.addShimmer(withCornerRadius: Constants.cornerRadius,
+                                  withBackgroundColor: Colours.shimmerColor)
+        dateLabelView.addShimmer(withCornerRadius: Constants.cornerRadius,
+                                 withBackgroundColor: Colours.shimmerColor)
+        descriptionLabelView.addShimmer(withCornerRadius: Constants.cornerRadius,
+                                        withBackgroundColor: Colours.shimmerColor)
     }
 
     func shimmerShinnig() {
@@ -83,36 +114,62 @@ final class ShimmerCell: UITableViewCell, ReusableCell {
             self.descriptionLabelView.startShining()
         }
     }
+}
+
+// MARK: - Constraints
+
+extension ShimmerCell {
+    private enum Constraints {
+        static let borderTopContent = 10.0
+        static let borderLeadingContent = 20.0
+        static let borderTrailingContent = 20.0
+        static let borderBottomContent = 10.0
+
+        static let imageHeightWidth = 80.0
+        static let leadingImageBorder = 20.0
+
+        static let titleTopBorder = 20.0
+        static let titleLeadingImage = 8.0
+        static let titleTrailingBorder = 20.0
+        static let titleBottomDate = 4.0
+        static let titleWidth = 207.0
+        static let titleHeight = 24.0
+
+        static let dateBottomDescription = 4.0
+        static let dateHeight = 12.0
+
+        static let descriptionWidth = 49.0
+        static let descriptionBottomBorder = 20.0
+    }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            borderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            borderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            borderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            borderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            borderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constraints.borderTopContent),
+            borderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constraints.borderLeadingContent),
+            borderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constraints.borderTrailingContent),
+            borderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constraints.borderBottomContent),
 
-            imageViewCellView.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: 20),
-            imageViewCellView.heightAnchor.constraint(equalToConstant: 80),
-            imageViewCellView.widthAnchor.constraint(equalToConstant: 80),
+            imageViewCellView.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: Constraints.leadingImageBorder),
+            imageViewCellView.heightAnchor.constraint(equalToConstant: Constraints.imageHeightWidth),
+            imageViewCellView.widthAnchor.constraint(equalToConstant: Constraints.imageHeightWidth),
             imageViewCellView.topAnchor.constraint(equalTo: titleLabelView.topAnchor),
 
-            titleLabelView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 20),
-            titleLabelView.widthAnchor.constraint(equalToConstant: 207),
-            titleLabelView.heightAnchor.constraint(equalToConstant: 24),
-            titleLabelView.leadingAnchor.constraint(equalTo: imageViewCellView.trailingAnchor, constant: 8),
-            titleLabelView.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -20),
-            titleLabelView.bottomAnchor.constraint(equalTo: dateLabelView.topAnchor, constant: -4),
+            titleLabelView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: Constraints.titleTopBorder),
+            titleLabelView.widthAnchor.constraint(equalToConstant: Constraints.titleWidth),
+            titleLabelView.heightAnchor.constraint(equalToConstant: Constraints.titleHeight),
+            titleLabelView.leadingAnchor.constraint(equalTo: imageViewCellView.trailingAnchor, constant: Constraints.titleLeadingImage),
+            titleLabelView.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -Constraints.titleTrailingBorder),
+            titleLabelView.bottomAnchor.constraint(equalTo: dateLabelView.topAnchor, constant: -Constraints.titleBottomDate),
 
             dateLabelView.leadingAnchor.constraint(equalTo: titleLabelView.leadingAnchor),
             dateLabelView.trailingAnchor.constraint(equalTo: titleLabelView.trailingAnchor),
-            dateLabelView.bottomAnchor.constraint(equalTo: descriptionLabelView.topAnchor, constant: -4),
-            titleLabelView.widthAnchor.constraint(equalToConstant: 110),
-            dateLabelView.heightAnchor.constraint(equalToConstant: 12),
+            dateLabelView.bottomAnchor.constraint(equalTo: descriptionLabelView.topAnchor, constant: -Constraints.dateBottomDescription),
+            dateLabelView.heightAnchor.constraint(equalToConstant: Constraints.dateHeight),
 
             descriptionLabelView.leadingAnchor.constraint(equalTo: titleLabelView.leadingAnchor),
             descriptionLabelView.trailingAnchor.constraint(equalTo: titleLabelView.trailingAnchor),
-            descriptionLabelView.heightAnchor.constraint(equalToConstant: 49),
-            descriptionLabelView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -20),
+            descriptionLabelView.heightAnchor.constraint(equalToConstant: Constraints.descriptionWidth),
+            descriptionLabelView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -Constraints.descriptionBottomBorder),
         ])
     }
 }

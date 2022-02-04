@@ -7,7 +7,7 @@ Es necesario descargar y realizar un pod install para ejecutar el proyecto.
 - Consumo de API Rest de NewsAPI
 - Arquitectura MVVM 
 - Patrones de diseño
-- Arquectura limpia
+- Clean code
 - Funcionamiento en modo offline una vez se ha producido una descarga de datos, usando Realm como fuente de persistencia local
 - Manejo de errores
 - Estructura modular de máxima eficiencia

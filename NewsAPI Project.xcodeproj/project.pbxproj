@@ -17,7 +17,6 @@
 		55458C2327AC718600595318 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55458BC827AC718500595318 /* RealmManager.swift */; };
 		55458C2427AC718600595318 /* NewModelRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55458BCA27AC718500595318 /* NewModelRealm.swift */; };
 		55458C2527AC718600595318 /* FetchNewsQueryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55458BCC27AC718500595318 /* FetchNewsQueryRequest.swift */; };
-		55458C2627AC718600595318 /* FetchNewsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55458BCF27AC718500595318 /* FetchNewsQuery.swift */; };
 		55458C2727AC718600595318 /* FetchNewsContainerInjections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55458BD127AC718500595318 /* FetchNewsContainerInjections.swift */; };
 		55458C2827AC718600595318 /* SourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55458BD327AC718500595318 /* SourceModel.swift */; };
 		55458C2927AC718600595318 /* NewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55458BD427AC718500595318 /* NewsModel.swift */; };
@@ -82,7 +81,6 @@
 		55458BC827AC718500595318 /* RealmManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		55458BCA27AC718500595318 /* NewModelRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewModelRealm.swift; sourceTree = "<group>"; };
 		55458BCC27AC718500595318 /* FetchNewsQueryRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchNewsQueryRequest.swift; sourceTree = "<group>"; };
-		55458BCF27AC718500595318 /* FetchNewsQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchNewsQuery.swift; sourceTree = "<group>"; };
 		55458BD127AC718500595318 /* FetchNewsContainerInjections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchNewsContainerInjections.swift; sourceTree = "<group>"; };
 		55458BD327AC718500595318 /* SourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceModel.swift; sourceTree = "<group>"; };
 		55458BD427AC718500595318 /* NewsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsModel.swift; sourceTree = "<group>"; };
@@ -202,12 +200,12 @@
 			isa = PBXGroup;
 			children = (
 				55458BC827AC718500595318 /* RealmManager.swift */,
-				55458BC927AC718500595318 /* Modeñs */,
+				55458BC927AC718500595318 /* Modeñs */,
 			);
 			path = Persistency;
 			sourceTree = "<group>";
 		};
-		55458BC927AC718500595318 /* Modeñs */ = {
+		55458BC927AC718500595318 /* Modeñs */ = {
 			isa = PBXGroup;
 			children = (
 				55458BCA27AC718500595318 /* NewModelRealm.swift */,
@@ -226,7 +224,6 @@
 		55458BCD27AC718500595318 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				55458BCE27AC718500595318 /* Queries */,
 				55458BD027AC718500595318 /* ContainerInjection */,
 				55458BD227AC718500595318 /* Models */,
 				55458BD627AC718500595318 /* UseCases */,
@@ -234,14 +231,6 @@
 				55458BDC27AC718500595318 /* Interfaces */,
 			);
 			path = Domain;
-			sourceTree = "<group>";
-		};
-		55458BCE27AC718500595318 /* Queries */ = {
-			isa = PBXGroup;
-			children = (
-				55458BCF27AC718500595318 /* FetchNewsQuery.swift */,
-			);
-			path = Queries;
 			sourceTree = "<group>";
 		};
 		55458BD027AC718500595318 /* ContainerInjection */ = {
@@ -546,7 +535,6 @@
 				29055CF7B3DB478A63BF1344 /* Pods-NewsAPI Project.debug.xcconfig */,
 				982E082059FCC45C1FBC6C94 /* Pods-NewsAPI Project.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -679,7 +667,6 @@
 			files = (
 				55458C3927AC718600595318 /* DetailModel.swift in Sources */,
 				55458C4527AC718600595318 /* DateCellModel.swift in Sources */,
-				55458C2627AC718600595318 /* FetchNewsQuery.swift in Sources */,
 				55458C2D27AC718600595318 /* SourceEntity.swift in Sources */,
 				55458C2527AC718600595318 /* FetchNewsQueryRequest.swift in Sources */,
 				55469AF027AC459000B2AA36 /* AppDelegate.swift in Sources */,

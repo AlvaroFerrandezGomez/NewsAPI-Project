@@ -6,7 +6,7 @@
 //
 
 protocol FetchNewsUseCase {
-    func execute(with query: FetchNewsQuery, _ completion: @escaping Response<NewsModel>)
+    func execute(_ completion: @escaping Response<NewsModel>)
 }
 
 final class DefaultFetchNewsUseCase: FetchNewsUseCase {
@@ -16,8 +16,8 @@ final class DefaultFetchNewsUseCase: FetchNewsUseCase {
         self.repository = repository
     }
 
-    func execute(with query: FetchNewsQuery, _ completion: @escaping Response<NewsModel>) {
-        repository.fetchNews(with: query) { result in
+    func execute(_ completion: @escaping Response<NewsModel>) {
+        repository.fetchNews() { result in
             switch result {
             case .success(let model):
                 completion(.success(model))

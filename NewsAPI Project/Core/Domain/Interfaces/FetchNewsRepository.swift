@@ -6,5 +6,5 @@
 //
 
 protocol FetchNewsRepository {
-    func fetchNews(with query: FetchNewsQuery, _ completion: @escaping Response<NewsModel>)
+    func fetchNews(_ completion: @escaping Response<NewsModel>)
 }

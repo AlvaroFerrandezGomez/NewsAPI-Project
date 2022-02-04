@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 protocol CloudFetchNewsDataSourceDelegate {
-    func fetchNews(with query: FetchNewsQuery, _ completion: @escaping Response<NewsEntity>)
+    func fetchNews(_ completion: @escaping Response<NewsEntity>)
     func fetchNewsFromRealm(_ completion: @escaping Response<[NewModelRealm]>)
 }
 
@@ -20,7 +20,7 @@ final class CloudFetchNewsDataSource: CloudFetchNewsDataSourceDelegate {
         self.apiClient = apiClient
     }
 
-    func fetchNews(with query: FetchNewsQuery, _ completion: @escaping Response<NewsEntity>) {
+    func fetchNews(_ completion: @escaping Response<NewsEntity>) {
         let request = FetchNewsQueryRequest()
 
         apiClient.execute(request) { result in

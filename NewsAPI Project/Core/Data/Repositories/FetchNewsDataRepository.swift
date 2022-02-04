@@ -14,8 +14,8 @@ final class FetchNewsDataRepository: FetchNewsRepository {
         self.dataSource = dataSource
     }
 
-    func fetchNews(with query: FetchNewsQuery, _ completion: @escaping Response<NewsModel>) {
-        self.dataSource.fetchNews(with: query) { result in
+    func fetchNews(_ completion: @escaping Response<NewsModel>) {
+        self.dataSource.fetchNews() { result in
             switch result {
             case .success(let response):
                 completion(.success(response.toDomain()))

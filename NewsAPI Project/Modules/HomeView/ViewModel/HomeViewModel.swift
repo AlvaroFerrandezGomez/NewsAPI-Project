@@ -68,8 +68,7 @@ final class DefaultHomeViewModel: HomeViewModel {
     }
 
     func fetchNews() {
-        let params = FetchNewsQuery(idQuery: "")
-        fetchNewsUseCase.execute(with: params) { [weak self] result in
+        fetchNewsUseCase.execute() { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
